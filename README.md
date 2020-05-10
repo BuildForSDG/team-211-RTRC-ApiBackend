@@ -1,99 +1,13 @@
-A one-liner phrase describing this project or app
-
-[![Codacy Badge](https://img.shields.io/badge/Code%20Quality-D-red)](https://img.shields.io/badge/Code%20Quality-D-red)
-
-
-## About
-
-What is this project about. Ok to enrich here or the section above it with an image. 
-
-Once this repo has been setup on Codacy by the TTL, replace the above badge with the actual one from the Codacy dashboard, and add the code coverage badge as well. This is mandatory
-
-This is a simple python starter repo template for setting up your project. The setup contains:
-
-- install: poetry via pip. poetry is a dependecy manager.
-
-- poetry: configuration in pyproject.toml
-
-- flake8: for linting and formatting
-
-## Why
-
-Talk about what problem this solves, what SDG(s) and SGD targets it addresses and why these are important
-
-## Usage
-How would someone use what you have built, include URLs to the deployed app, service e.t.c when you have it setup
-
-
-## Setup
-You should have **Python 3.5+** and **git** installed. 
-
-1. Clone the repo you've created from the template herein and change into the directory
-
-    ``
-    git clone <Your Repository>
-    ``
-
-2. Change into repo directory
-
-    ``
-    cd python-starter
-    ``
-
-3. Install poetry, a dependecy manager for python.
-
-    On windows, you will need powershell to install it:
-
-    ``
-    (Invoke-WebRequest -Uri https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py -UseBasicParsing).Content | python
-    ``
-
-    After that you will need to restart the shell to make it operational.
-
-    &nbsp;
-
-    On linux and other posix systems (mac included):
-
-    ``
-    curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python
-    ``
-
-    &nbsp;
-
-    To check that it is correctly installed, you can check the version:
-    ``
-    poetry --version
-    ``
-
-    May be the latest stable version is not installed with the installation script, to update poetry, you can run:
-
-    ``
-    poetry self update
-    ``
-
-4. With poetry installed, you should install project dependecies by running:
-
-    ``
-    poetry install
-    ``
-
-    This will install pytest for running tests and flake8, linter for your project.
-
-#### To Note
-`src/app.py` is the entry to the project and source code should go into the `src` folder.
-
-All tests should be written in the `tests` folder. tests/test_src.py is a sample test file that shows how tests should like. Feel free to delete it.
-
-#### Hints
-
-- Lint: `poetry run flake8`
-- Run tests using the command: `poetry run pytest`
-- Install dependencies: 
-  `poetry add <dependency>`
-- Install dev dependencies:
-  `poetry add --dev <dev-dependency>`
-- Run your project:
-  `poetry run app`
+# BUILD FOR SDG TOLL/PUBLIC REVENUE COLLECTION PROJECT
+A Project built with Django and DRF api style.
+- How to setup
+- Create a virtual environment and activate it
+- Install the requirements of the project by running: 'pip install -r requirements.txt'
+- Create a postgresql database by running: 'create database buildforsdgdb'
+- Run Server: 'python manage.py migrate' to migrate the database models.
+- You can create a new superuser by: 'python manage.py createsuperuser' and follow the prompt
+- Collect all the project's static files into the staticfiles directory by: 'python manage.py collectstatic'
+- Start the development server by: 'python manage.py runserver'
 
 
 ## Authors
@@ -117,3 +31,5 @@ It's powerful to always give credit.
 
 ## LICENSE
 MIT
+
+* Cody Regards
