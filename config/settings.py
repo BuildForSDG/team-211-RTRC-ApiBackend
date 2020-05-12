@@ -50,6 +50,8 @@ MY_APPS = [
     # general apps
     'api.users',
     'api.wallet',
+    'api.tolls',
+    'api.vehicles',
 ]
 
 DJANGO_APPS = [

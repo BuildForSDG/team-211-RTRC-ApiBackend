@@ -29,6 +29,20 @@ from config.sytem_vars import DEFAULT_ADMIN_PASSWORD
 from .permissions import IsCollector, IsUser
 
 
+class NationalIdTypeViewSet(ReadOnlyModelViewSet):
+    model = NationalIdType
+    serializer_class = NationalIdTypeSerializer
+    permission_classes = [IsAuthenticated]
+    queryset = NationalIdType.objects.all()
+
+
+class AdminNationalIdTypeViewSet(ModelViewSet):
+    model = NationalIdType
+    serializer_class = NationalIdTypeSerializer
+    permission_classes = [IsAdminUser]
+    queryset = NationalIdType.objects.all()
+
+
 class CollectorViewSet(ReadOnlyModelViewSet):
     model = User
     permission_classes = [IsCollector]
