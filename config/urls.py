@@ -25,8 +25,8 @@ from api.tolls.views import (
     TollLocationViewSet, AdminTollLocationViewSet,
 )
 from api.vehicles.views import (
-    VehicleTypeViewSet, 
-    AdminVehicleTypeViewSet
+    VehicleCategoryViewSet, 
+    AdminVehicleCategoryViewSet
     )
 
 
@@ -35,7 +35,7 @@ router.register('users', UserViewSet, base_name='users')
 router.register('collectors', CollectorViewSet, basename='collector')
 router.register('id-types', NationalIdTypeViewSet, basename='id_types')
 router.register('toll-locations', TollLocationViewSet, basename='toll_locations')
-router.register('vehicle-types', VehicleTypeViewSet, basename='vehicle_types')
+router.register('vehicle-categories', VehicleCategoryViewSet, basename='vehicle_types')
 
 #admin endpoints
 admin_router = routers.DefaultRouter()
@@ -43,7 +43,7 @@ admin_router.register('users', AdminUserViewSet, base_name='admin_users')
 admin_router.register('collectors', AdminCollectorViewSet, basename='admin_collector')
 admin_router.register('id-types', AdminNationalIdTypeViewSet, basename='admin_id_types')
 admin_router.register('toll-locations', AdminTollLocationViewSet, basename='admin_toll_locations')
-admin_router.register('vehicle-types', AdminVehicleTypeViewSet, basename='admin_vehicle_types')
+admin_router.register('vehicle-categories', VehicleCategoryViewSet, basename='admin_vehicle_types')
 
 admin.site.site_header = "I-COLLECTOR ADMIN"
 admin.site.site_title = "I-COLLECTOR ADMIN"
