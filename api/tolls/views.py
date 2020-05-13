@@ -15,9 +15,11 @@ from django.template.loader import render_to_string
 from django.shortcuts import get_object_or_404
 from api.users.permissions import IsCollector, IsUser
 from api.users.models import User
-from .models import TollLocation
-from .serializers import TollLocationSerializer
+from .models import TollLocation, Toll
+from .serializers import TollLocationSerializer, TollSerializer
 import api.tolls.contants as const
+from api.vehicles.models import Vehicle
+
 
 class TollLocationViewSet(ReadOnlyModelViewSet):
     model = TollLocation
@@ -36,7 +38,7 @@ class AdminTollLocationViewSet(ModelViewSet):
     def assign(self, request, pk=None):
         instance = self.get_object()
         collector = User.objects.get(id=request.data['collector'])
-        
+
         # verify if collector already assigned to another location.
         all_locations = TollLocation.objects.filter(active=True)
         for loc in all_locations:
@@ -45,7 +47,7 @@ class AdminTollLocationViewSet(ModelViewSet):
                     return Response({
                         'message': 'Collector Already Assigned to ' + str(loc.name),
                     }, status=status.HTTP_400_BAD_REQUEST)
-        
+
         instance.collectors.add(collector)
         instance.save()
         serializer = self.get_serializer(instance)
@@ -63,35 +65,37 @@ class AdminTollLocationViewSet(ModelViewSet):
         return Response(data=serializer.data, status=status.HTTP_200_OK, headers=headers)
 
 
-# class TollViewSet(ReadOnlyModelViewSet):
-#     model = Toll
-#     serializer_class = [TollSerializer]
-#     permission_classes = [IsUser, IsCollector]
+class TollViewSet(ReadOnlyModelViewSet):
+    model = Toll
+    serializer_class = [TollSerializer]
+    permission_classes = [IsUser, IsCollector]
 
-#     def get_queryset(self):
-#         if self.request.user.is_user:
-#             return self.model.objects.filter(vehicle__user=self.request.user)
+    def get_queryset(self):
+        if self.request.user.is_user:
+            return self.model.objects.filter(vehicle__user=self.request.user)
             
-#         elif self.request.user.is_collector:
-#             return self.model.objects.filter(collector=self.request.user)
+        elif self.request.user.is_collector:
+            return self.model.objects.filter(collector=self.request.user)
 
-#     @action(detail=False, methods=['POST'], permission_classes=[IsCollector,], url_path='confirm-payment')
-#     def confirm_payment(self, request):
-#         instance = Toll()
-#         instance.vehicle = Vehicle.objects.get(id=request.data['vehicle'])
-#         instance.paid_on = datetime.now()
-#         instance.status = const.PAID
-#         instance.collector = request.user
+    @action(detail=False, methods=['POST'], permission_classes=[IsCollector,], url_path='confirm-payment')
+    def confirm_payment(self, request):
+        instance = Toll()
+        instance.vehicle = Vehicle.objects.get(id=request.data['vehicle'])
+        instance.paid_on = datetime.now()
+        instance.status = const.PAID
+        instance.collector = request.user
 
-#         # deduct wallet here
+        # deduct wallet here
 
-#         instance.save()
-#         serializer = self.get_serializer(instance)
-#         headers = self.get_success_headers(serializer.data)
-#         return Response(data=serializer.data, status=status.HTTP_200_OK, headers=headers)
-
-
+        instance.save()
+        serializer = self.get_serializer(instance)
+        headers = self.get_success_headers(serializer.data)
+        return Response(data=serializer.data, status=status.HTTP_200_OK, headers=headers)
 
 
-
+class AdminTollViewSet(ModelViewSet):
+    model = Toll
+    serializer_class = TollSerializer
+    permission_classes = [IsAdminUser]
+    queryset = Toll.objects.all()
 
