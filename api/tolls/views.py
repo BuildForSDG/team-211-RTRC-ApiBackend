@@ -19,7 +19,8 @@ from .models import TollLocation, Toll
 from .serializers import TollLocationSerializer, TollSerializer
 import api.tolls.contants as const
 from api.vehicles.models import Vehicle
-
+from api.wallet.models import Wallet, Transaction
+import secrets
 
 class TollLocationViewSet(ReadOnlyModelViewSet):
     model = TollLocation
@@ -79,18 +80,32 @@ class TollViewSet(ReadOnlyModelViewSet):
 
     @action(detail=False, methods=['POST'], permission_classes=[IsCollector,], url_path='confirm-payment')
     def confirm_payment(self, request):
-        instance = Toll()
-        instance.vehicle = Vehicle.objects.get(id=request.data['vehicle'])
-        instance.paid_on = datetime.now()
-        instance.status = const.PAID
-        instance.collector = request.user
+        vehicle = Vehicle.objects.get(id=request.data['vehicle'])
+        wallet = Wallet.objects.get(user=vehicle.user)
 
-        # deduct wallet here
+        if wallet.balance < vehicle.category.toll_fee:
+            return Response({'detail': 'Insufficient Funds in Wallet'}, status=status.HTTP_400_BAD_REQUEST)
+        elif wallet.balance >= vehicle.category.toll_fee:
+            instance = Toll()
+            instance.vehicle = vehicle
+            instance.paid_on = datetime.now()
+            instance.status = const.PAID
+            instance.collector = request.user
+            
+            # deduct toll fee from wallet
+            wallet.balance -= vehicle.category.toll_fee
+            wallet.save()
+            instance.save()
 
-        instance.save()
-        serializer = self.get_serializer(instance)
-        headers = self.get_success_headers(serializer.data)
-        return Response(data=serializer.data, status=status.HTTP_200_OK, headers=headers)
+            # Log Transaction
+            Transaction.objects.create(
+                wallet=wallet, transaction_type='DEBIT',
+                status='PAID',amount=vehicle.category.toll_fee,
+                reference_code=secrets.token_hex(10)
+            )
+            serializer = self.get_serializer(instance)
+            headers = self.get_success_headers(serializer.data)
+            return Response(data=serializer.data, status=status.HTTP_200_OK, headers=headers)
 
 
 class AdminTollViewSet(ModelViewSet):

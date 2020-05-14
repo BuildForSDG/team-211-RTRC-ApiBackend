@@ -44,6 +44,7 @@ class Toll(models.Model):
 
     def get_key(self):
         reference = self.generate_hashid()
+        self.reference = reference
         while Toll.objects.filter(reference=reference).exists():
             reference = self.generate_hashid()
         self.reference = reference

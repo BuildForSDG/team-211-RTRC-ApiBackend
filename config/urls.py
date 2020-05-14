@@ -31,8 +31,13 @@ from api.vehicles.views import (
     VehicleViewSet,
     AdminVehicleViewSet,
     )
+from api.wallet.views import (
+    WalletViewSet, AdminDepositViewSet,
+    DepositViewSet, TransactionViewSet,
+    AdminTransactionViewSet
+)
 
-
+# user and collector endpoints
 router = routers.DefaultRouter()
 router.register('users', UserViewSet, base_name='users')
 router.register('collectors', CollectorViewSet, basename='collector')
@@ -41,6 +46,9 @@ router.register('toll-locations', TollLocationViewSet, basename='toll_locations'
 router.register('tolls', TollViewSet, basename='tolls')
 router.register('vehicle-categories', VehicleCategoryViewSet, basename='vehicle_categories')
 router.register('vehicles', VehicleViewSet, basename='vehicles')
+router.register('wallet', WalletViewSet, basename='wallet')
+router.register('deposits', DepositViewSet, basename='deposits')
+router.register('transactions', TransactionViewSet, basename='transactions')
 
 #admin endpoints
 admin_router = routers.DefaultRouter()
@@ -51,6 +59,8 @@ admin_router.register('toll-locations', AdminTollLocationViewSet, basename='admi
 admin_router.register('tolls', AdminTollViewSet, 'admin_tolls')
 admin_router.register('vehicle-categories', VehicleCategoryViewSet, basename='admin_vehicle_categories')
 admin_router.register('vehicles', AdminVehicleViewSet, basename='admin_vehicles')
+admin_router.register('deposits', AdminDepositViewSet, basename='admin_deposits')
+admin_router.register('transactions', AdminTransactionViewSet, basename='admin_transactions')
 
 admin.site.site_header = "I-COLLECTOR ADMIN"
 admin.site.site_title = "I-COLLECTOR ADMIN"
