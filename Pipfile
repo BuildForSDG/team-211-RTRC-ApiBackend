@@ -1,0 +1,44 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+
+[packages]
+django = "==2.2.10"
+djangorestframework = "==3.10.3"
+djangorestframework-jwt = "==1.11.0"
+drfdocs = "*"
+django-allauth = "==0.36.0"
+django-rest-auth = "==0.9.3"
+django-crispy-forms = "==1.7.2"
+django-environ = "==0.4.4"
+django-cors-headers = "==2.2.0"
+python-decouple = "==3.1"
+ipython = "*"
+gunicorn = "==19.9.0"
+boto = "==2.49.0"
+boto3 = "==1.7.58"
+django-storages = "==1.6.6"
+whitenoise = "==4.1"
+django-redis = "==4.9.0"
+django-heroku = "*"
+psycopg2-binary = "==2.8.3"
+django-extensions = "==2.2.1"
+pillow = "==5.2.0"
+django-braces = "==1.13.0"
+django-debug-toolbar = "==2.0"
+dj-database-url = "==0.5.0"
+django-anymail = "==7.0.0"
+django-phonenumber-field = "==4.0.0"
+phonenumbers = "==8.12.1"
+django-q = {extras = ["sentry"],version = "*"}
+weasyprint = "==50"
+pylint-django = "==2.0.11"
+requests = "==2.22.0"
+sentry-sdk = "*"
+django-money = "==0.15"
+
+[requires]
+python_version = "3.6"
