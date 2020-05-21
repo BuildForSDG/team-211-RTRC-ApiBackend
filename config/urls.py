@@ -75,15 +75,15 @@ urlpatterns = [
     path('api/v1/admin/', include(admin_router.urls)),
 
     # Authentication Setup urls
-    path('api/v1/rest-auth/', include('rest_auth.urls')),
-    path('api/v1/rest-auth/registration/', include('rest_auth.registration.urls')),
-    path('api/v1/rest-auth/registration/token-auth/', obtain_jwt_token),
-    path('api/v1/rest-auth/registration/refresh-token/', refresh_jwt_token),
+    path('api/v1/auth/', include('rest_auth.urls')),
+    path('api/v1/auth/register/', include('rest_auth.registration.urls')),
+    path('api/v1/auth/token-auth/', obtain_jwt_token),
+    path('api/v1/auth/refresh-token/', refresh_jwt_token),
 
     # custom auth urls
-    path('api/v1/rest-auth/registration/account-email-verification-sent/', null_view, name='account_email_verification_sent'),
+    path('api/v1/auth/account-email-verification-sent/', null_view, name='account_email_verification_sent'),
     url(r'^verify-email/(?P<key>\d+)/$', VerifyEmailView.as_view(), name='account_confirm_email'),
-    url(r'^api/v1/rest-auth/password/reset/confirm/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$', null_view, name='password_reset_confirm'),
+    url(r'^api/v1/auth/password/reset/confirm/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$', null_view, name='password_reset_confirm'),
     path('super-site/', admin.site.urls),
 ]
 
