@@ -34,11 +34,14 @@ django-anymail = "==7.0.0"
 django-phonenumber-field = "==4.0.0"
 phonenumbers = "==8.12.1"
 django-q = {extras = ["sentry"],version = "*"}
-weasyprint = "==50"
 pylint-django = "==2.0.11"
 requests = "==2.22.0"
 sentry-sdk = "*"
 django-money = "==0.15"
+pyqrcode = "==1.2.1"
+pypng = "==0.0.20"
+hashids = "==1.2.0"
+WeasyPrint = "==50"
 
 [requires]
 python_version = "3.6"
