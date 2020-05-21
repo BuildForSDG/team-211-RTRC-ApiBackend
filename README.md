@@ -1,5 +1,5 @@
 # BUILD FOR SDG TOLL/PUBLIC REVENUE COLLECTION PROJECT
-A Project built with Django and DRF api style.
+A Project built with Django and DRF api style. https://e-revenue-api.herokuapp.com
 - How to setup
 - Create a virtual environment and activate it
 - Install the requirements of the project by running: 'pip install -r requirements.txt'

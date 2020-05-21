@@ -50,6 +50,8 @@ MY_APPS = [
     # general apps
     'api.users',
     'api.wallet',
+    'api.tolls',
+    'api.vehicles',
 ]
 
 DJANGO_APPS = [
@@ -164,7 +166,7 @@ USE_TZ = True
 # REST FRAMEWORK CONFIGURATION
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.AllowAny',
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
@@ -302,6 +304,7 @@ if not ENVIRONMENT == 'local':
 # PAYSTACK API KEYS
 PAYSTACK_SECRET = env.str('PAYSTACK_SECRET')
 PAYSTACK_PUBLIC = env.str('PAYSTACK_PUBLIC')
+PAYSTACK_BASE = env('PAYSTACK_BASE')
 
 # heroku specific
 db_from_env = dj_database_url.config(conn_max_age=500)

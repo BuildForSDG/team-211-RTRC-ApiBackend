@@ -26,3 +26,6 @@ requests==2.22.0
 sentry-sdk
 django-q[sentry]
 django-money==0.15
+pyqrcode==1.2.1
+pypng==0.0.20
+hashids==1.2.0

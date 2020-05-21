@@ -4,17 +4,24 @@ from rest_framework.permissions import IsAdminUser, IsAuthenticated, AllowAny
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 from django.contrib.auth import get_user_model
 import secrets
-from wallet.serializers import *
-from wallet.models import *
-
+from api.wallet.serializers import (
+    WalletSerializer, AdminDepositSerializer,
+    DepositSerializer, TransactionSerializer
+)
+from api.wallet.models import (
+    Wallet, Deposit, Transaction,
+)
+import api.wallet.constants as const
 User = get_user_model()
 
 from rest_framework.decorators import action
 
+from api.wallet.utils import confirm_payment
 
-class WalletModelViewSet(ModelViewSet):
+
+class WalletViewSet(ModelViewSet):
     model = Wallet
-    serializer_class = WalletModelSerializer
+    serializer_class = WalletSerializer
     permission_classes = [IsAuthenticated]
     queryset = Wallet.objects.all()
 
@@ -26,13 +33,13 @@ class WalletModelViewSet(ModelViewSet):
     def transactions(self, request, pk=None):
         wallet = self.get_object()
         transactions = Transaction.objects.filter(wallet=wallet)
-        serializer = TransactionModelSerializer(transactions, many=True)
+        serializer = TransactionSerializer(transactions, many=True)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
 
-class DepositModelViewSet(ModelViewSet):
+class DepositViewSet(ModelViewSet):
     model = Deposit
-    serializer_class = DepositModelSerializer
+    serializer_class = DepositSerializer
     permission_classes = [IsAuthenticated]
     queryset = Deposit.objects.all()
 
@@ -41,36 +48,55 @@ class DepositModelViewSet(ModelViewSet):
         return Deposit.objects.filter(user=self.request.user.id).order_by('-created_at')
 
     def create(self, request, *args, **kwargs):
-        user = request.user
-        wallet = Wallet.objects.get(user=user.id)
-        amount = request.data['amount']
-        ref_code = secrets.token_hex(3)
-        method = request.data['method']
-        Deposit.objects.create(user=request.user, wallet=wallet, method=method, amount=amount, ref_code=ref_code)
-        return Response({"success": "Your deposit request has been received"}, status=status.HTTP_201_CREATED)
+        wallet = Wallet.objects.get(user=request.user)
+        ref_code = secrets.token_hex(10)
+        while Deposit.objects.filter(ref_code=ref_code).exists():
+            ref_code = secrets.token_hex(10)
+        
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save(
+            user=request.user, wallet=wallet, method='paystack',
+            ref_code=ref_code, status=const.PENDING
+            )
+        headers = self.get_success_headers(serializer.data)
+        return Response(data=serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    @action(detail=False, methods=['POST'])
+    def confirm(self, request):
+        if not confirm_payment(request.data['reference']):
+            return Response({ 'detail': 'PAYMENT CONFIRMATION FAILED' }, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            instance = Deposit.objects.get(ref_code=request.data['reference'])
+            instance.status = const.SUCCESS
+            instance.save()
+            # update wallet balance
+            wallet = Wallet.objects.get(user=request.user)
+            wallet.balance += instance.amount
+            wallet.save()
+            serializer = self.get_serializer(instance)
+            headers = self.get_success_headers(serializer.data)
+            return Response(data=serializer.data, status=status.HTTP_200_OK, headers=headers)
 
 
-class AdminDepositModelViewSet(ModelViewSet):
+class AdminDepositViewSet(ModelViewSet):
     model = Deposit
-    serializer_class = AdminDepositModelSerializer
+    serializer_class = AdminDepositSerializer
     permission_classes = [IsAdminUser]
     queryset = Deposit.objects.all()
 
-    @action(detail=False, methods=['post'])
-    def approve_deposit(self, request):
-        """
-        Approve a payment request
-        1. get the deposit request
-        2. get the wallet
-        3. fund the wallet
-        4. Change the status of the request
-        5. email the user to inform them of a successful deposit
-        """
-        deposit = Deposit.objects.get(id=['id'])
-        wallet = Wallet.objects.get(id=deposit.wallet.id)
-        wallet.balance += deposit.amount
-        wallet.save()
-        deposit.status = "completed"
-        deposit.save()
-        return Response({'message': 'Successfully processed payment'}, status=status.HTTP_200_OK)
 
+class TransactionViewSet(ModelViewSet):
+    model = Transaction
+    serializer_class = TransactionSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Transaction.objects.filter(wallet__user=self.request.user)
+
+
+class AdminTransactionViewSet(ModelViewSet):
+    model = Transaction
+    serializer_class = TransactionSerializer
+    permission_classes = [IsAdminUser]
+    queryset = Transaction.objects.all()

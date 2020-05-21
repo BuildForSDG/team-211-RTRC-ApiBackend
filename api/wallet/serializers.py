@@ -1,12 +1,12 @@
 from rest_framework import serializers
-from bills_api.users.serializers import UserSerializer
+from api.users.serializers import UserSerializer
 from .models import Wallet, Deposit, Transaction
 from django.contrib.auth import get_user_model
 import random
 User = get_user_model()
 
 
-class WalletModelSerializer(serializers.ModelSerializer):
+class WalletSerializer(serializers.ModelSerializer):
     user = UserSerializer()
 
     class Meta:
@@ -14,41 +14,45 @@ class WalletModelSerializer(serializers.ModelSerializer):
         fields = ['id',
                   'user',
                   'balance',
-                  'created_at', ]
-        read_only_fields = ('id', 'user', 'balance', 'created_at')    
+                  'created_at', 'updated_at']
+        read_only_fields = ('id', 'user', 'balance', 'created_at', 'updated_at',)    
 
 
-class DepositModelSerializer(serializers.ModelSerializer):
-    user = UserSerializer()
+class DepositSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
+    wallet = WalletSerializer(read_only=True)
 
     class Meta:
         model = Deposit
         fields = ['id',
                   'user',
+                  'wallet',
                   'status',
                   'method',
                   'ref_code',
                   'amount',
                   'created_at',
-                  'modified', ]
+                  'updated_at', ]
+        read_only_fields = ('id',)
 
 
-class AdminDepositModelSerializer(serializers.ModelSerializer):
+class AdminDepositSerializer(serializers.ModelSerializer):
     class Meta:
         model = Deposit
         user = serializers.PrimaryKeyRelatedField(read_only=True, default=serializers.CurrentUserDefault())
         fields = ['id',
                   'user',
+                  'wallet',
                   'status',
                   'method',
                   'ref_code',
                   'amount',
                   'created_at',
-                  'modified', ]
+                  'updated_at', ]
 
 
-class TransactionModelSerializer(serializers.ModelSerializer):
-    wallet = WalletModelSerializer()
+class TransactionSerializer(serializers.ModelSerializer):
+    wallet = WalletSerializer()
     
     class Meta:
         model = Transaction
