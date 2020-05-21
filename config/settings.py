@@ -141,7 +141,7 @@ CACHES = {
 # for cors header
 CORS_ORIGIN_ALLOW_ALL = True
 
-CORS_ORIGIN_WHITELIST = env.list('CORS_ORIGIN_WHITELIST', [])
+CORS_ORIGIN_WHITELIST = env.list('CORS_ORIGIN_WHITELIST', default=[])
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
