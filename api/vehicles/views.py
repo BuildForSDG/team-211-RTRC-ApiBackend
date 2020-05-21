@@ -34,9 +34,10 @@ class AdminVehicleCategoryViewSet(ModelViewSet):
 class VehicleViewSet(ModelViewSet):
     model = Vehicle
     serializer_class = VehicleSerializer
-    permission_classes = [IsUser, IsCollector]
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
+        print(self.request.user.is_user)
         if self.request.user.is_collector:
             return Vehicle.objects.all()
         elif self.request.user.is_user:

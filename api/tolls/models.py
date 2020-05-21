@@ -18,7 +18,7 @@ class TollLocation(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return str(self.name)
+        return "{} - {}" .format(str(self.name), str(self.id))
 
 
 class Toll(models.Model):

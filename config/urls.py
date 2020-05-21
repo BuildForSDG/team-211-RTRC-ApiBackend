@@ -62,9 +62,9 @@ admin_router.register('vehicles', AdminVehicleViewSet, basename='admin_vehicles'
 admin_router.register('deposits', AdminDepositViewSet, basename='admin_deposits')
 admin_router.register('transactions', AdminTransactionViewSet, basename='admin_transactions')
 
-admin.site.site_header = "I-COLLECTOR ADMIN"
-admin.site.site_title = "I-COLLECTOR ADMIN"
-admin.site.index_title = "I-COLLECTOR ADMIN"
+admin.site.site_header = "E-REVENUE ADMIN"
+admin.site.site_title = "E-REVENUE ADMIN"
+admin.site.index_title = "E-REVENUE ADMIN"
 
 urlpatterns = [
     path('', TemplateView.as_view(template_name='index.html'), name='home'),
