@@ -38,7 +38,7 @@ THIRD_PARTY_APPS = [
     'rest_framework.authtoken',
     'rest_auth',
     'rest_framework_jwt',
-    'rest_framework_docs',
+    'drf_yasg',
     'corsheaders',
     'storages',
     'django_q',
@@ -194,6 +194,10 @@ REST_AUTH_REGISTER_SERIALIZERS = {
 REST_AUTH_SERIALIZERS = {
     'USER_DETAILS_SERIALIZER': 'api.users.serializers.UserDetailModelSerializer',
     'PASSWORD_RESET_SERIALIZER': 'api.users.password_serializer.PasswordResetSerializer'
+}
+
+SWAGGER_SETTINGS = {
+    'VALIDATOR_URL': 'http://localhost:8189',
 }
 
 # rest framework docs
