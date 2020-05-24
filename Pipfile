@@ -6,7 +6,7 @@ verify_ssl = true
 [dev-packages]
 
 [packages]
-django = "==1.11.28"
+django = "==2.2.12"
 djangorestframework = "==3.10.3"
 djangorestframework-jwt = "==1.11.0"
 drfdocs = "*"
@@ -42,6 +42,8 @@ pyqrcode = "==1.2.1"
 pypng = "==0.0.20"
 hashids = "==1.2.0"
 WeasyPrint = "==50"
+django-rest-swagger = "==2.2.0"
+drf-yasg = {extras = ["validation"],version = "*"}
 
 [requires]
 python_version = "3.6"
