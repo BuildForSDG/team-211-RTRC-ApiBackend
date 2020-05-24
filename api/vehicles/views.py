@@ -37,11 +37,10 @@ class VehicleViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        print(self.request.user.is_user)
-        if self.request.user.is_collector:
-            return Vehicle.objects.all()
-        elif self.request.user.is_user:
+        if self.request.user.is_user:
             return Vehicle.objects.filter(user=self.request.user)
+        elif self.request.user.is_collector or self.request.user.is_staff:
+            return Vehicle.objects.all()
 
     def create(self, request, *args, **kwargs):
         category = VehicleCategory.objects.get(id=request.data['category'])

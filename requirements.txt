@@ -1,4 +1,4 @@
-django==2.2.10
+django==1.11.28
 dj-database-url==0.5.0
 django-heroku
 djangorestframework==3.10.3
@@ -10,6 +10,7 @@ django-debug-toolbar==2.0
 django-environ==0.4.4
 django-anymail==7.0.0
 django-phonenumber-field==4.0.0
+drfdocs
 psycopg2-binary==2.8.3
 django-cors-headers==2.2.0
 python-decouple==3.1

@@ -1,5 +1,4 @@
-from django.conf.urls import url
-from django.urls import path, include
+from django.conf.urls import url, include
 from django.contrib import admin
 from django.views.generic import TemplateView
 from django.conf import settings
@@ -67,24 +66,24 @@ admin.site.site_title = "E-REVENUE ADMIN"
 admin.site.index_title = "E-REVENUE ADMIN"
 
 urlpatterns = [
-    path('', TemplateView.as_view(template_name='index.html'), name='home'),
-    # path('docs/', include_docs_urls('Kwik Chow API Documentation')),
+    url(r'^$', TemplateView.as_view(template_name='index.html'), name='home'),
+    url(r'^docs/', include('rest_framework_docs.urls')),
 
     # App Specific url & namespaces
-    path('api/v1/', include(router.urls)),
-    path('api/v1/admin/', include(admin_router.urls)),
+    url(r'^api/v1/', include(router.urls)),
+    url(r'api/v1/admin/', include(admin_router.urls)),
 
     # Authentication Setup urls
-    path('api/v1/auth/', include('rest_auth.urls')),
-    path('api/v1/auth/register/', include('rest_auth.registration.urls')),
-    path('api/v1/auth/token-auth/', obtain_jwt_token),
-    path('api/v1/auth/refresh-token/', refresh_jwt_token),
+    url(r'^api/v1/auth/', include('rest_auth.urls')),
+    url(r'^api/v1/auth/register/', include('rest_auth.registration.urls')),
+    url(r'^api/v1/auth/token-auth/', obtain_jwt_token),
+    url(r'^api/v1/auth/refresh-token/', refresh_jwt_token),
 
     # custom auth urls
-    path('api/v1/auth/account-email-verification-sent/', null_view, name='account_email_verification_sent'),
+    url(r'^api/v1/auth/account-email-verification-sent/', null_view, name='account_email_verification_sent'),
     url(r'^verify-email/(?P<key>\d+)/$', VerifyEmailView.as_view(), name='account_confirm_email'),
     url(r'^api/v1/auth/password/reset/confirm/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$', null_view, name='password_reset_confirm'),
-    path('super-site/', admin.site.urls),
+    url(r'^super-site/', admin.site.urls),
 ]
 
 if settings.DEBUG:
