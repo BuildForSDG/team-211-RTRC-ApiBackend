@@ -28,7 +28,6 @@ django-q[sentry]
 django-money==0.15
 qrcode==6.1
 hashids==1.2.0
-django-rest-swagger==2.2.0
 drf-yasg
 drf-yasg[validation]
 cloudinary==1.20.0
