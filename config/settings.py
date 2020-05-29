@@ -7,6 +7,7 @@ import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
 from sentry_sdk.integrations.logging import LoggingIntegration
 import dj_database_url
+import cloudinary
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -38,6 +39,7 @@ THIRD_PARTY_APPS = [
     'rest_framework.authtoken',
     'rest_auth',
     'rest_framework_jwt',
+    'rest_framework_swagger',
     'drf_yasg',
     'corsheaders',
     'storages',
@@ -174,6 +176,7 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.BasicAuthentication',
         # 'rest_framework.authentication.SessionAuthentication',
     ),
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 35
 }
@@ -198,6 +201,8 @@ REST_AUTH_SERIALIZERS = {
 
 SWAGGER_SETTINGS = {
     'VALIDATOR_URL': 'http://localhost:8189',
+    'LOGIN_URL':'/admin/login',
+    'LOGOUT_URL': '/admin/logout',
 }
 
 # rest framework docs
@@ -309,6 +314,13 @@ if not ENVIRONMENT == 'local':
 PAYSTACK_SECRET = env.str('PAYSTACK_SECRET')
 PAYSTACK_PUBLIC = env.str('PAYSTACK_PUBLIC')
 PAYSTACK_BASE = env('PAYSTACK_BASE')
+
+# cloudinary image management
+cloudinary.config(
+    cloud_name=env.str('CLOUDINARY_NAME'),
+    api_key=env.str("CLOUDINARY_API_KEY"),
+    api_secret=env.str("CLOUDINARY_API_SECRET")
+)
 
 # heroku specific
 db_from_env = dj_database_url.config(conn_max_age=500)

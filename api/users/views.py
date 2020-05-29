@@ -9,6 +9,7 @@ from rest_framework.permissions import (
 )
 from rest_framework.decorators import api_view, action
 from rest_framework.views import APIView
+from rest_auth.registration.serializers import VerifyEmailSerializer
 from allauth.account.views import ConfirmEmailView
 
 # django imports
@@ -19,7 +20,6 @@ from django.template.loader import render_to_string
 from .serializers import (
     UserSerializer,
     AdminUserSerializer,
-    VerifyEmailSerializer,
     NationalIdTypeSerializer,
     CollectorSerializer
 )

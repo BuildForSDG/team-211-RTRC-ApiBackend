@@ -11,6 +11,7 @@ from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token
 from allauth.account.views import ConfirmEmailView
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
+from rest_framework_swagger.views import get_swagger_view
 
 from api.users.views import (
     AdminUserViewSet,
@@ -59,7 +60,7 @@ admin_router.register('collectors', AdminCollectorViewSet, basename='admin_colle
 admin_router.register('id-types', AdminNationalIdTypeViewSet, basename='admin_id_types')
 admin_router.register('toll-locations', AdminTollLocationViewSet, basename='admin_toll_locations')
 admin_router.register('tolls', AdminTollViewSet, 'admin_tolls')
-admin_router.register('vehicle-categories', VehicleCategoryViewSet, basename='admin_vehicle_categories')
+admin_router.register('vehicle-categories', AdminVehicleCategoryViewSet, basename='admin_vehicle_categories')
 admin_router.register('vehicles', AdminVehicleViewSet, basename='admin_vehicles')
 admin_router.register('deposits', AdminDepositViewSet, basename='admin_deposits')
 admin_router.register('transactions', AdminTransactionViewSet, basename='admin_transactions')
@@ -70,9 +71,9 @@ admin.site.index_title = "E-REVENUE ADMIN"
 
 schema_view = get_schema_view(
    openapi.Info(
-      title="Snippets API",
+      title="E-Revenue API",
       default_version='v1',
-      description="Test description",
+      description="Detailed Documentation of E-Revenue API",
       terms_of_service="https://www.google.com/policies/terms/",
       contact=openapi.Contact(email="contact@snippets.local"),
       license=openapi.License(name="BSD License"),
@@ -81,17 +82,15 @@ schema_view = get_schema_view(
    permission_classes=(permissions.AllowAny,),
 )
 
+# schema_view = get_swagger_view(title="E-Revenue Docs")
+
 
 urlpatterns = [
     path('', TemplateView.as_view(template_name='index.html'), name='home'),
     # path('docs/', include_docs_urls('Kwik Chow API Documentation')),
     url(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
-    url(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
-    url(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
-    path('docs/', TemplateView.as_view(
-        template_name='redoc.html',
-        extra_context={'schema_url':'openapi-schema'}
-    ), name='redoc'),
+    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 
     # App Specific url & namespaces
     path('api/v1/', include(router.urls)),
@@ -107,7 +106,7 @@ urlpatterns = [
     path('api/v1/auth/account-email-verification-sent/', null_view, name='account_email_verification_sent'),
     url(r'^verify-email/(?P<key>\d+)/$', VerifyEmailView.as_view(), name='account_confirm_email'),
     url(r'^api/v1/auth/password/reset/confirm/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$', null_view, name='password_reset_confirm'),
-    path('super-site/', admin.site.urls),
+    path('admin/', admin.site.urls),
 ]
 
 if settings.DEBUG:

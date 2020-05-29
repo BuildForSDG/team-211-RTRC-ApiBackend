@@ -80,6 +80,3 @@ class UserDetailModelSerializer(serializers.ModelSerializer):
                   'is_user'
                   ]
 
-
-class VerifyEmailSerializer(serializers.Serializer):
-    key = serializers.CharField()
