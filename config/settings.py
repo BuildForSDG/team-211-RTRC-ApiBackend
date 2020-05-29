@@ -199,7 +199,7 @@ REST_AUTH_SERIALIZERS = {
 }
 
 SWAGGER_SETTINGS = {
-    'VALIDATOR_URL': 'http://localhost:8189',
+    'USE_SESSION_AUTH': False,
     'LOGIN_URL':'/admin/login',
     'LOGOUT_URL': '/admin/logout',
 }
