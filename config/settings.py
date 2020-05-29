@@ -215,9 +215,9 @@ SWAGGER_SETTINGS = {
 
 STATIC_URL = '/static/'
 
-STATICFILES_DIRS = [
-    str(PUBLIC_PATH('static')),
-]
+# STATICFILES_DIRS = [
+#     str(PUBLIC_PATH('static')),
+# ]
 
 STATIC_ROOT = str(ROOT_PATH('staticfiles'))
 
