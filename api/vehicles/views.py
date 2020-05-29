@@ -15,12 +15,15 @@ from api.users.permissions import IsCollector, IsUser
 from api.users.models import User
 from .models import VehicleCategory, Vehicle
 from .serializers import VehicleCategorySerializer, VehicleSerializer
+import qrcode
+import io
+from cloudinary import uploader
 
 
 class VehicleCategoryViewSet(ReadOnlyModelViewSet):
     model = VehicleCategory
     serializer_class = VehicleCategorySerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     queryset = VehicleCategory.objects.filter(active=True)
 
 
@@ -47,6 +50,19 @@ class VehicleViewSet(ModelViewSet):
         serializer=self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save(user=request.user, category=category)
+        # generate qr_code, upload and save URL.
+        qr = qrcode.QRCode(version=1,error_correction=qrcode.constants.ERROR_CORRECT_L,box_size=10,border=2)
+        qr.add_data(serializer.data['id'])
+        img = qr.make_image()
+        imgByte = io.BytesIO()
+        img.save(imgByte, format='PNG')
+        final_image = imgByte.getvalue()
+        uploaded_file = uploader.upload(final_image)
+        instance = self.model.objects.get(id=serializer.data['id'])
+        instance.qr_code = uploaded_file['secure_url']
+        instance.save()
+        serializer = self.get_serializer(instance)
+
         headers = self.get_success_headers(serializer.data)
         return Response(data=serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
