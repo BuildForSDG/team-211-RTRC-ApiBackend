@@ -103,9 +103,7 @@ class AdminUserViewSet(ModelViewSet):
     model = User
     permission_classes = [IsAdminUser]
     serializer_class = AdminUserSerializer
-    
-    def get_queryset(self):
-        return User.objects.filter(id=self.request.user.id)
+    queryset = User.objects.all()
 
 
 @api_view
