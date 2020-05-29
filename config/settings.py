@@ -69,6 +69,7 @@ INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + MY_APPS
 
 MIDDLEWARE = (
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     "django.middleware.locale.LocaleMiddleware",
@@ -222,6 +223,8 @@ STATIC_ROOT = str(ROOT_PATH('staticfiles'))
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = str(ROOT_PATH('media'))
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
 # authentication defaults
 # auth settings
