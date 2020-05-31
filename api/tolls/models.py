@@ -1,11 +1,9 @@
 from django.db import models
 from django.conf import settings
 import uuid
-import secrets
-import random
-from hashids import Hashids
 import api.tolls.contants as const
 from api.vehicles.models import Vehicle
+import api.tolls.utils as u
 
 
 class TollLocation(models.Model):
@@ -18,7 +16,7 @@ class TollLocation(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return "{} - {}" .format(str(self.name), str(self.id))
+        return "{0} - {1}" .format(str(self.name), str(self.id))
 
 
 class Toll(models.Model):
@@ -34,18 +32,10 @@ class Toll(models.Model):
     def __str__(self):
         return str(self.reference)
 
-    def generate_hashid(self):
-        hash_ids = Hashids(
-            salt='E-Revenue',
-            min_length=8
-        )
-        hash_id = hash_ids.encode(random.randint(1, 10000000))
-        return hash_id.upper()
-
-    def get_key(self):
-        reference = self.generate_hashid()
+    def save(self):
+        reference = u.generate_hashid()
         self.reference = reference
         while Toll.objects.filter(reference=reference).exists():
-            reference = self.generate_hashid()
+            reference = u.generate_hashid()
         self.reference = reference
-        self.save()
+        super.save()

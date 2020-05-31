@@ -1,14 +1,14 @@
-from rest_framework.serializers import ModelSerializer, SerializerMethodField
+from rest_framework.serializers import ModelSerializer
 
 from .models import VehicleCategory, Vehicle
 from api.users.serializers import UserSerializer
-from api.users.models import User
 
 
 class VehicleCategorySerializer(ModelSerializer):
     class Meta:
         model = VehicleCategory
         fields = '__all__'
+        read_only_fields = ('id', 'image',)
 
 
 class VehicleSerializer(ModelSerializer):

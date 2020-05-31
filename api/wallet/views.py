@@ -52,7 +52,7 @@ class DepositViewSet(ModelViewSet):
         ref_code = secrets.token_hex(10)
         while Deposit.objects.filter(ref_code=ref_code).exists():
             ref_code = secrets.token_hex(10)
-        
+
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save(

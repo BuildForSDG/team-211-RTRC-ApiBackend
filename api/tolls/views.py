@@ -2,7 +2,6 @@ from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import (
-    IsAuthenticated,
     AllowAny,
     IsAdminUser
 )
@@ -10,9 +9,9 @@ from rest_framework.decorators import action
 from datetime import datetime
 
 # django imports
-from django.core.mail import EmailMessage
-from django.template.loader import render_to_string
-from django.shortcuts import get_object_or_404
+# from django.core.mail import EmailMessage
+# from django.template.loader import render_to_string
+# from django.shortcuts import get_object_or_404
 from api.users.permissions import IsCollector, IsUser
 from api.users.models import User
 from .models import TollLocation, Toll

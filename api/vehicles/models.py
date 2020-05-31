@@ -7,12 +7,13 @@ class VehicleCategory(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=250, unique=True)
     toll_fee = models.DecimalField(max_digits=16, decimal_places=2, default=0.00)
+    image = models.URLField(null=True)
     active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return "{} - {} - {}".format(str(self.name), str(self.toll_fee), str(self.id))
+        return "{0} - {1} - {2}".format(str(self.name), str(self.toll_fee), str(self.id))
 
 
 class Vehicle(models.Model):

@@ -5,7 +5,6 @@ from .models import (
     Toll,
 )
 from api.users.serializers import UserSerializer
-from api.users.models import User
 from api.vehicles.serializers import VehicleSerializer
 
 

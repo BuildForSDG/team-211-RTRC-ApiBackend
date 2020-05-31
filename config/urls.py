@@ -28,7 +28,7 @@ from api.tolls.views import (
     TollViewSet, AdminTollViewSet,
 )
 from api.vehicles.views import (
-    VehicleCategoryViewSet, 
+    VehicleCategoryViewSet,
     AdminVehicleCategoryViewSet,
     VehicleViewSet,
     AdminVehicleViewSet,

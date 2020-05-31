@@ -3,16 +3,15 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import (
     IsAuthenticated,
-    AllowAny,
     IsAdminUser
 )
-from rest_framework.decorators import action
+# from rest_framework.decorators import action
 
 # django imports
-from django.core.mail import EmailMessage
-from django.template.loader import render_to_string
-from api.users.permissions import IsCollector, IsUser
-from api.users.models import User
+# from django.core.mail import EmailMessage
+# from django.template.loader import render_to_string
+# from api.users.permissions import IsCollector, IsUser
+# from api.users.models import User
 from .models import VehicleCategory, Vehicle
 from .serializers import VehicleCategorySerializer, VehicleSerializer
 import qrcode
@@ -32,6 +31,25 @@ class AdminVehicleCategoryViewSet(ModelViewSet):
     serializer_class = VehicleCategorySerializer
     permission_classes = [IsAdminUser]
     queryset = VehicleCategory.objects.all()
+
+    def create(self, request, *args, **kwargs):
+        # upload image
+        uploaded_file = uploader.upload(request.data['image'])
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save(image=uploaded_file['secure_url'])
+        headers = self.get_success_headers(serializer.data)
+        return Response(data=serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        # upload image
+        uploaded_file = uploader.upload(request.data['image'])
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save(image=uploaded_file['secure_url'])
+        headers = self.get_success_headers(serializer.data)
+        return Response(data=serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
 class VehicleViewSet(ModelViewSet):
