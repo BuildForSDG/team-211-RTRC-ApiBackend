@@ -1,4 +1,7 @@
 # BUILD FOR SDG TOLL/PUBLIC REVENUE COLLECTION PROJECT
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/ace2499ece514ce5bad74183ceca1b60)](https://app.codacy.com/gh/BuildForSDG/team-211-RTRC-ApiBackend?utm_source=github.com&utm_medium=referral&utm_content=BuildForSDG/team-211-RTRC-ApiBackend&utm_campaign=Badge_Grade_Settings)
+
 A Project built with Django and DRF api style.
 - How to setup
 - Create a virtual environment and activate it
