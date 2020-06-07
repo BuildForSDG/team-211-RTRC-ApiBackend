@@ -3,6 +3,7 @@ import uuid
 from django.conf import settings
 import api.wallet.constants as const
 
+
 class Wallet(models.Model):
     """Every user account has a wallet created for them on sign up"""
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

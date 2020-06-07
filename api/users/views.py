@@ -28,6 +28,10 @@ from .models import User, NationalIdType
 from config.sytem_vars import DEFAULT_ADMIN_PASSWORD
 from .permissions import IsCollector, IsUser
 
+from api.wallet.models import Deposit, Wallet, Transaction
+from api.tolls.models import Toll, TollLocation
+from api.vehicles.models import Vehicle, VehicleCategory
+
 
 class NationalIdTypeViewSet(ReadOnlyModelViewSet):
     model = NationalIdType
@@ -104,6 +108,49 @@ class AdminUserViewSet(ModelViewSet):
     permission_classes = [IsAdminUser]
     serializer_class = AdminUserSerializer
     queryset = User.objects.all()
+
+    @action(detail=False, methods=['GET',])
+    def stats(self, request):
+        wallets = Wallet.objects.all()
+        total_wallet = 0.00
+        for w in wallets:
+            total_wallet += float(w.balance)
+
+        transactions = Transaction.objects.all()
+        total_transactions = 0.00
+        for t in transactions:
+            total_transactions += float(t.amount)
+        
+        deposits = Deposit.objects.all()
+        total_deposits = 0.00
+        for d in deposits:
+            total_deposits += float(d.amount)
+        
+        locations = TollLocation.objects.all()
+        total_locations = locations.count()
+
+        drivers = User.objects.filter(is_user=True)
+        total_drivers = drivers.count()
+
+        collectors = User.objects.filter(is_collector=True)
+        total_collectors = collectors.count()
+
+        vehicles = Vehicle.objects.all()
+        total_vehicles = vehicles.count()
+
+        categories = VehicleCategory.objects.all()
+        total_categories = categories.count()
+
+        return Response({'results': {
+            "total_wallet": total_wallet,
+            "total_transactions": total_transactions,
+            "total_deposits": total_deposits,
+            "total_locations": total_locations,
+            "total_drivers": total_drivers,
+            "total_collectors": total_collectors,
+            "total_vehicles": total_vehicles,
+            "total_categories": total_categories
+        }}, status=status.HTTP_200_OK)
 
 
 @api_view
