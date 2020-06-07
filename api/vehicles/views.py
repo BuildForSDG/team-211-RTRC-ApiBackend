@@ -10,7 +10,7 @@ from rest_framework.permissions import (
 # django imports
 # from django.core.mail import EmailMessage
 # from django.template.loader import render_to_string
-# from api.users.permissions import IsCollector, IsUser
+from api.users.permissions import IsCollector, IsUser
 # from api.users.models import User
 from .models import VehicleCategory, Vehicle
 from .serializers import VehicleCategorySerializer, VehicleSerializer
@@ -22,7 +22,7 @@ from cloudinary import uploader
 class VehicleCategoryViewSet(ReadOnlyModelViewSet):
     model = VehicleCategory
     serializer_class = VehicleCategorySerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsUser, IsCollector]
     queryset = VehicleCategory.objects.filter(active=True)
 
 

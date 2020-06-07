@@ -23,7 +23,6 @@ class WalletViewSet(ModelViewSet):
     model = Wallet
     serializer_class = WalletSerializer
     permission_classes = [IsAuthenticated]
-    queryset = Wallet.objects.all()
 
     def get_queryset(self):
         """get all transactions from this user's wallet """
