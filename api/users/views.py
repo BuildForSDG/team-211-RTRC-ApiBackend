@@ -56,7 +56,7 @@ class AdminCollectorViewSet(ModelViewSet):
     model = User
     permission_classes = [IsAdminUser]
     serializer_class = CollectorSerializer
-    queryset = User.objects.all()
+    queryset = User.objects.filter(is_collector=True)
 
     def create(self, request, *args, **kwargs):
         id_type = NationalIdType.objects.get(id=request.data['national_id_type'])
@@ -66,12 +66,12 @@ class AdminCollectorViewSet(ModelViewSet):
 
         # set default password
         new_user = User.objects.get(id=serializer.data['id'])
+        new_user.is_collector = True
         new_user.set_password(DEFAULT_ADMIN_PASSWORD)
         new_user.save()
 
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-
 
     def update(self, request, *args, **kwargs):
         instance = self.get_object()

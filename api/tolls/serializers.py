@@ -16,7 +16,7 @@ class TollLocationSerializer(ModelSerializer):
         fields = '__all__'
 
     def get_collectors(self, obj):
-        if self.request.user.is_user:
+        if self.context['request'].user.is_user:
             collectors = None
         else:
             collectors = obj.collectors.all()

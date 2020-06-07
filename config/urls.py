@@ -83,7 +83,8 @@ schema_view = get_schema_view(
 
 
 urlpatterns = [
-    path('', TemplateView.as_view(template_name='index.html'), name='home'),
+    # path('', TemplateView.as_view(template_name='index.html'), name='home'),
+    path('', admin.site.urls),
     url(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     path('docs/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
@@ -102,7 +103,6 @@ urlpatterns = [
     path('api/v1/auth/account-email-verification-sent/', null_view, name='account_email_verification_sent'),
     url(r'^verify-email/(?P<key>\d+)/$', VerifyEmailView.as_view(), name='account_confirm_email'),
     url(r'^api/v1/auth/password/reset/confirm/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$', null_view, name='password_reset_confirm'),
-    path('admin/', admin.site.urls),
 ]
 
 if settings.DEBUG:

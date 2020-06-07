@@ -30,11 +30,11 @@ class TollLocationViewSet(ReadOnlyModelViewSet):
 
 class AdminTollLocationViewSet(ModelViewSet):
     model = TollLocation
-    serializer_classs = TollLocationSerializer
+    serializer_class = TollLocationSerializer
     permission_classes = [IsAdminUser]
     queryset = TollLocation.objects.all()
 
-    @action(detail=True, methods=['POST'])
+    @action(detail=True, methods=['POST', 'PUT'])
     def assign(self, request, pk=None):
         instance = self.get_object()
         collector = User.objects.get(id=request.data['collector'])
@@ -54,7 +54,7 @@ class AdminTollLocationViewSet(ModelViewSet):
         headers = self.get_success_headers(serializer.data)
         return Response(data=serializer.data, status=status.HTTP_200_OK, headers=headers)
     
-    @action(detail=True, methods=['POST'])
+    @action(detail=True, methods=['POST', 'PUT'])
     def remove(self, request, *args, **kwargs):
         instance = self.get_object()
         collector = User.objects.get(id=request.data['collector'])
