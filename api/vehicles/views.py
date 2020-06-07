@@ -22,8 +22,8 @@ from cloudinary import uploader
 class VehicleCategoryViewSet(ReadOnlyModelViewSet):
     model = VehicleCategory
     serializer_class = VehicleCategorySerializer
-    permission_classes = [IsUser, IsCollector]
-    queryset = VehicleCategory.objects.filter(active=True)
+    permission_classes = [IsAuthenticated]
+    queryset = VehicleCategory.objects.all()
 
 
 class AdminVehicleCategoryViewSet(ModelViewSet):
