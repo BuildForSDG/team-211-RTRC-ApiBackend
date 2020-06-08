@@ -4,6 +4,7 @@ from .models import Wallet, Deposit, Transaction
 from django.contrib.auth import get_user_model
 import random
 User = get_user_model()
+from api.tolls.serializers import TollSerializer
 
 
 class WalletSerializer(serializers.ModelSerializer):
@@ -52,10 +53,11 @@ class AdminDepositSerializer(serializers.ModelSerializer):
 
 
 class TransactionSerializer(serializers.ModelSerializer):
-    wallet = WalletSerializer()
+    wallet = WalletSerializer(read_only=True)
+    toll = TollSerializer(read_only=True)
     
     class Meta:
         model = Transaction
         fields = [
-            'id', 'wallet', 'transaction_type', 'amount',
+            'id', 'wallet', 'toll', 'transaction_type', 'amount',
             'reference_code', 'status', 'created_at']

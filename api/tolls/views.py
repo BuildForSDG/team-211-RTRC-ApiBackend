@@ -80,6 +80,7 @@ class TollViewSet(ReadOnlyModelViewSet):
     @action(detail=False, methods=['POST'], permission_classes=[IsCollector,], url_path='confirm-payment')
     def confirm_payment(self, request):
         vehicle = Vehicle.objects.get(id=request.data['vehicle'])
+        location = TollLocation.objects.get(id=request.data['location'])
         wallet = Wallet.objects.get(user=vehicle.user)
 
         if wallet.balance < vehicle.category.toll_fee:
@@ -90,6 +91,7 @@ class TollViewSet(ReadOnlyModelViewSet):
             instance.paid_on = datetime.now()
             instance.status = const.PAID
             instance.collector = request.user
+            instance.location = location
             
             # deduct toll fee from wallet
             wallet.balance -= vehicle.category.toll_fee
@@ -98,7 +100,7 @@ class TollViewSet(ReadOnlyModelViewSet):
 
             # Log Transaction
             Transaction.objects.create(
-                wallet=wallet, transaction_type='DEBIT',
+                wallet=wallet, toll=instance, collector=request.user, transaction_type='DEBIT',
                 status='PAID',amount=vehicle.category.toll_fee,
                 reference_code=secrets.token_hex(10)
             )

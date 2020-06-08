@@ -60,7 +60,7 @@ class VehicleViewSet(ModelViewSet):
     def get_queryset(self):
         if self.request.user.is_user:
             return Vehicle.objects.filter(user=self.request.user)
-        elif self.request.user.is_collector or self.request.user.is_staff:
+        else:
             return Vehicle.objects.all()
 
     def create(self, request, *args, **kwargs):

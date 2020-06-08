@@ -2,6 +2,7 @@ from django.db import models
 import uuid
 from django.conf import settings
 import api.wallet.constants as const
+from api.tolls.models import Toll
 
 
 class Wallet(models.Model):
@@ -38,6 +39,8 @@ class Transaction(models.Model):
     """ Transactions that occur in each wallet"""
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     wallet = models.ForeignKey('Wallet', related_name='wallet_transactions', on_delete=models.CASCADE)
+    collector = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, related_name='toll_collectors')
+    toll = models.ForeignKey(Toll, on_delete=models.SET_NULL, null=True, related_name='toll_transactions')
     transaction_type = models.CharField(max_length=30, default=const.DEBIT)
     status = models.CharField(max_length=30, default=const.PENDING)
     amount = models.DecimalField(max_digits=20, decimal_places=2, default=0.00)

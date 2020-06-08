@@ -63,6 +63,18 @@ class AdminCollectorViewSet(ModelViewSet):
     queryset = User.objects.filter(is_collector=True)
 
     def create(self, request, *args, **kwargs):
+        email = User.objects.filter(email=request.data['email'])
+        if email.exists():
+            return Response({'email': ['email already exists for another user',]}, status=status.HTTP_400_BAD_REQUEST)
+
+        username = User.objects.filter(username=request.data['username'])
+        if username.exists():
+            return Response({'username': ['username already exists for another user',]}, status=status.HTTP_400_BAD_REQUEST)
+        
+        phone = User.objects.filter(phone=request.data['phone'])
+        if phone.exists():
+            return Response({'phone': ['phone number already exists for another user',]}, status=status.HTTP_400_BAD_REQUEST)
+
         id_type = NationalIdType.objects.get(id=request.data['national_id_type'])
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)

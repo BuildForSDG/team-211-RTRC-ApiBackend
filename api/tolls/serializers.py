@@ -26,11 +26,12 @@ class TollLocationSerializer(ModelSerializer):
 class TollSerializer(ModelSerializer):
     vehicle = VehicleSerializer(read_only=True)
     collector = UserSerializer(read_only=True)
+    location = TollLocationSerializer(read_only=True)
 
     class Meta:
         model = Toll
         fields = [
-            'id', 'vehicle', 'collector', 'status', 'paid_on', 'reference',
+            'id', 'vehicle', 'collector', 'location', 'status', 'paid_on', 'reference',
             'created_at', 'updated_at'
         ]
         read_only_fields = (

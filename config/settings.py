@@ -296,7 +296,7 @@ LOGGING = {
 SENTRY_DSN = env('SENTRY_DSN')
 SENTRY_LOG_LEVEL = env.int("DJANGO_SENTRY_LOG_LEVEL", default=logging.INFO)
 
-ENVIRONMENT = env('ENVIRONMENT', default='local')
+ENVIRONMENT = env.str('ENVIRONMENT', default='local')
 
 if not ENVIRONMENT == 'local':
     sentry_logging = LoggingIntegration(

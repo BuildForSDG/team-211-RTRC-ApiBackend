@@ -91,7 +91,10 @@ class TransactionViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Transaction.objects.filter(wallet__user=self.request.user)
+        if self.request.user.is_user:
+            return Transaction.objects.filter(wallet__user=self.request.user)
+        elif self.request.user.is_collector:
+            return Transaction.objects.filter(collector=self.request.user)
 
 
 class AdminTransactionViewSet(ModelViewSet):

@@ -23,6 +23,7 @@ class Toll(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     vehicle = models.ForeignKey(Vehicle, on_delete=models.SET_NULL, null=True, related_name='vehicle_tolls')
     collector = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, related_name='collector_tolls')
+    location = models.ForeignKey(TollLocation, on_delete=models.SET_NULL, null=True, related_name='toll_locations')
     status = models.CharField(max_length=10, choices=const.TOLL_STATUS_CHOICES, default=const.UNPAID)
     paid_on = models.DateTimeField(null=True)
     reference = models.CharField(max_length=50, null=True, unique=True)
