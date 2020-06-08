@@ -87,7 +87,7 @@ class TollViewSet(ModelViewSet):
     def confirm_payment(self, request):
         vehicle = Vehicle.objects.get(id=request.data['vehicle'])
         location = TollLocation.objects.get(id=request.data['location'])
-        wallet = Wallet.objects.get(user=request.user)
+        wallet = Wallet.objects.get(user=vehicle.user)
 
         if wallet.balance < vehicle.category.toll_fee:
             return Response({'detail': 'Insufficient Funds in Wallet'}, status=status.HTTP_400_BAD_REQUEST)
