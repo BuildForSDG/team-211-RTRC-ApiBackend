@@ -24,7 +24,7 @@ import secrets
 class TollLocationViewSet(ReadOnlyModelViewSet):
     model = TollLocation
     serializer_class = TollLocationSerializer
-    permission_classes = [IsUser]
+    permission_classes = [IsUser, IsCollector]
 
     def get_queryset(self):
         if self.request.user.is_user:
