@@ -138,12 +138,13 @@ class AdminTransactionViewSet(ModelViewSet):
     def stats(self, request):
 
         transactions = Transaction.objects.all()
+        serializer = self.get_serializer(transactions, many=True)
         total_amount = 0.00
         for d in transactions:
             total_amount += float(d.amount)
         
         stats = {
-            "transactions": transactions,
+            "transactions": serializer.data,
             "total_amount": total_amount
         }
         return Response({"results": stats}, status=status.HTTP_200_OK)

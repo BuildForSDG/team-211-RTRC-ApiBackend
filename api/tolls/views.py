@@ -72,23 +72,22 @@ class AdminTollLocationViewSet(ModelViewSet):
         return Response(data=serializer.data, status=status.HTTP_200_OK, headers=headers)
 
 
-class TollViewSet(ReadOnlyModelViewSet):
+class TollViewSet(ModelViewSet):
     model = Toll
     serializer_class = [TollSerializer]
-    permission_classes = [IsUser, IsCollector]
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         if self.request.user.is_user:
-            return self.model.objects.filter(vehicle__user=self.request.user)
-            
-        elif self.request.user.is_collector:
-            return self.model.objects.filter(collector=self.request.user)
+            return Toll.objects.filter(vehicle__user=self.request.user)
+        else:
+            return Toll.objects.filter(collector=self.request.user)
 
-    @action(detail=False, methods=['POST'], permission_classes=[IsCollector,], url_path='confirm-payment')
+    @action(detail=False, methods=['POST'], permission_classes=[IsCollector], url_path='confirm-payment')
     def confirm_payment(self, request):
         vehicle = Vehicle.objects.get(id=request.data['vehicle'])
         location = TollLocation.objects.get(id=request.data['location'])
-        wallet = Wallet.objects.get(user=vehicle.user)
+        wallet = Wallet.objects.get(user=request.user)
 
         if wallet.balance < vehicle.category.toll_fee:
             return Response({'detail': 'Insufficient Funds in Wallet'}, status=status.HTTP_400_BAD_REQUEST)
@@ -100,11 +99,11 @@ class TollViewSet(ReadOnlyModelViewSet):
             instance.reference = u.unique_hashid()
             instance.collector = request.user
             instance.location = location
+            instance.save()
             
             # deduct toll fee from wallet
             wallet.balance -= vehicle.category.toll_fee
             wallet.save()
-            instance.save()
 
             # Log Transaction
             Transaction.objects.create(
@@ -112,9 +111,9 @@ class TollViewSet(ReadOnlyModelViewSet):
                 status='PAID',amount=vehicle.category.toll_fee,
                 reference_code=secrets.token_hex(10)
             )
-            serializer = self.get_serializer(instance)
-            headers = self.get_success_headers(serializer.data)
-            return Response(data=serializer.data, status=status.HTTP_200_OK, headers=headers)
+            # serializer = self.get_serializer(instance)
+            # headers = self.get_success_headers(serializer.data)
+            return Response({"results": "Payment Successful"}, status=status.HTTP_200_OK)
 
 
 class AdminTollViewSet(ModelViewSet):

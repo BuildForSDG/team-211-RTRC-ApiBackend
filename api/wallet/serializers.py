@@ -60,4 +60,4 @@ class TransactionSerializer(serializers.ModelSerializer):
         model = Transaction
         fields = [
             'id', 'wallet', 'toll', 'transaction_type', 'amount',
-            'reference_code', 'status', 'created_at']
+            'reference_code', 'status', 'created_at', 'updated_at']
