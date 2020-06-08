@@ -25,7 +25,12 @@ class TollLocationViewSet(ReadOnlyModelViewSet):
     model = TollLocation
     serializer_class = TollLocationSerializer
     permission_classes = [IsUser]
-    queryset = TollLocation.objects.filter(active=True)
+
+    def get_queryset(self):
+        if self.request.user.is_user:
+            return TollLocation.objects.filter(active=True)
+        else:
+            return TollLocation.objects.filter(collectors__id=self.request.user.id)
 
 
 class AdminTollLocationViewSet(ModelViewSet):
