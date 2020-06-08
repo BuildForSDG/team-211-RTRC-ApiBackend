@@ -3,7 +3,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import (
     AllowAny,
-    IsAdminUser
+    IsAdminUser,
+    IsAuthenticated
 )
 from rest_framework.decorators import action
 from datetime import datetime
@@ -24,7 +25,7 @@ import secrets
 class TollLocationViewSet(ReadOnlyModelViewSet):
     model = TollLocation
     serializer_class = TollLocationSerializer
-    permission_classes = [IsUser, IsCollector]
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         if self.request.user.is_user:
