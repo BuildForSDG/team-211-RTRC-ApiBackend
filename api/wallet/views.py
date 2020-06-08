@@ -28,12 +28,29 @@ class WalletViewSet(ModelViewSet):
         """get all transactions from this user's wallet """
         return Wallet.objects.filter(user=self.request.user.id).order_by('-created_at')
 
-    @action(detail=True, methods=['GET'])
-    def transactions(self, request, pk=None):
-        wallet = self.get_object()
-        transactions = Transaction.objects.filter(wallet=wallet)
-        serializer = TransactionSerializer(transactions, many=True)
-        return Response(data=serializer.data, status=status.HTTP_200_OK)
+    @action(detail=False, methods=['GET',], permission_classes=[IsAdminUser])
+    def stats(self, request):
+        user_count = User.objects.all().count()
+        wallets = Wallet.objects.all()
+        total_balance = 0.00
+        all_balances = []
+
+        for w in wallets:
+            total_balance += float(w.balance)
+            all_balances.append(w.balance)
+        
+        average_balance = total_balance / 2
+        min_balance = min(all_balances)
+        max_balance = max(all_balances)
+
+        stats = {
+            'users': user_count,
+            'total_balance': total_balance,
+            'average_balance': average_balance,
+            'min_balance': min_balance,
+            'max_balance': max_balance
+        }
+        return Response({'results': stats}, status=status.HTTP_200_OK)
 
 
 class DepositViewSet(ModelViewSet):
@@ -84,6 +101,20 @@ class AdminDepositViewSet(ModelViewSet):
     permission_classes = [IsAdminUser]
     queryset = Deposit.objects.all()
 
+    @action(detail=False, methods=['GET'])
+    def stats(self, request):
+
+        deposits = Deposit.objects.filter(status=const.SUCCESS)
+        total_amount = 0.00
+        for d in deposits:
+            total_amount += float(d.amount)
+        
+        stats = {
+            "deposits": deposits,
+            "total_amount": total_amount
+        }
+        return Response({"results": stats}, status=status.HTTP_200_OK)
+
 
 class TransactionViewSet(ModelViewSet):
     model = Transaction
@@ -102,3 +133,17 @@ class AdminTransactionViewSet(ModelViewSet):
     serializer_class = TransactionSerializer
     permission_classes = [IsAdminUser]
     queryset = Transaction.objects.all()
+
+    @action(detail=False, methods=['GET'])
+    def stats(self, request):
+
+        transactions = Transaction.objects.all()
+        total_amount = 0.00
+        for d in transactions:
+            total_amount += float(d.amount)
+        
+        stats = {
+            "transactions": transactions,
+            "total_amount": total_amount
+        }
+        return Response({"results": stats}, status=status.HTTP_200_OK)

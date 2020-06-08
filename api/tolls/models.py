@@ -3,7 +3,6 @@ from django.conf import settings
 import uuid
 import api.tolls.contants as const
 from api.vehicles.models import Vehicle
-import api.tolls.utils as u
 
 
 class TollLocation(models.Model):
@@ -33,10 +32,3 @@ class Toll(models.Model):
     def __str__(self):
         return str(self.reference)
 
-    def save(self):
-        reference = u.generate_hashid()
-        self.reference = reference
-        while Toll.objects.filter(reference=reference).exists():
-            reference = u.generate_hashid()
-        self.reference = reference
-        super.save()

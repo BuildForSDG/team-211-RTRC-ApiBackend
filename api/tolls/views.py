@@ -18,6 +18,7 @@ from api.users.models import User
 from .models import TollLocation, Toll
 from .serializers import TollLocationSerializer, TollSerializer
 import api.tolls.contants as const
+import api.tolls.utils as u
 from api.vehicles.models import Vehicle
 from api.wallet.models import Wallet, Transaction
 import secrets
@@ -96,6 +97,7 @@ class TollViewSet(ReadOnlyModelViewSet):
             instance.vehicle = vehicle
             instance.paid_on = datetime.now()
             instance.status = const.PAID
+            instance.reference = u.unique_hashid()
             instance.collector = request.user
             instance.location = location
             

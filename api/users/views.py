@@ -122,6 +122,13 @@ class AdminUserViewSet(ModelViewSet):
     queryset = User.objects.all()
 
     @action(detail=False, methods=['GET',])
+    def drivers(self, request):
+        drivers = self.model.objects.filter(is_user=True)
+        serializer = self.get_serializer(drivers, many=True)
+        headers = self.get_success_headers(serializer.data)
+        return Response(data=serializer.data, status=status.HTTP_200_OK, headers=headers)
+
+    @action(detail=False, methods=['GET',])
     def stats(self, request):
         wallets = Wallet.objects.all()
         total_wallet = 0.00
