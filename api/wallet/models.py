@@ -17,7 +17,7 @@ class Wallet(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return str(self.balance)
+        return "{0} - {1}".format(str(self.user.username), str(self.balance))
 
 
 class Deposit(models.Model):
@@ -32,7 +32,7 @@ class Deposit(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return str(self.id)
+        return "{0} - {1}".format(str(self.user.username), str(self.amount))
 
 
 class Transaction(models.Model):
@@ -52,6 +52,6 @@ class Transaction(models.Model):
         ordering = ('-created_at',)
 
     def __str__(self):
-        return str(self.reference_code)
+        return "{0} - {1}".format(str(self.wallet.user.username), str(self.amount))
 
 

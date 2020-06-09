@@ -15,7 +15,7 @@ class TollLocation(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return "{0} - {1}" .format(str(self.name), str(self.id))
+        return "{0} - {1}" .format(str(self.name), str(self.address))
 
 
 class Toll(models.Model):
@@ -30,5 +30,5 @@ class Toll(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return str(self.reference)
+        return "{0} - {1}".format(str(self.vehicle.user.username), str(self.location.name))
 

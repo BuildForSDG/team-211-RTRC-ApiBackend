@@ -29,5 +29,5 @@ class Vehicle(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return str(self.registration_number)
+        return "{0} - {1}".format(str(self.user.username), str(self.registration_number))
 
