@@ -18,7 +18,7 @@ class NationalIdType(models.Model):
 
 class User(AbstractUser):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    phone = models.CharField(max_length=15, unique=True)
+    phone = models.CharField(max_length=15)
     name = models.CharField(max_length=150)
     national_id = models.CharField(max_length=150, null=True, unique=True)
     national_id_type = models.ForeignKey(NationalIdType, on_delete=models.SET_NULL, null=True, related_name='user_id_type')
