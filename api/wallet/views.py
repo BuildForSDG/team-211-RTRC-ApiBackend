@@ -105,12 +105,13 @@ class AdminDepositViewSet(ModelViewSet):
     def stats(self, request):
 
         deposits = Deposit.objects.filter(status=const.SUCCESS)
+        serializer = self.get_serializer(deposits, many=True)
         total_amount = 0.00
         for d in deposits:
             total_amount += float(d.amount)
         
         stats = {
-            "deposits": deposits,
+            "deposits": serializer.data,
             "total_amount": total_amount
         }
         return Response({"results": stats}, status=status.HTTP_200_OK)
