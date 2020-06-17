@@ -121,7 +121,7 @@ class AdminUserViewSet(ModelViewSet):
     serializer_class = AdminUserSerializer
     queryset = User.objects.all()
 
-    @action(detail=False, methods=['GET',])
+    @action(detail=False, methods=['GET',], serializer_class=UserSerializer)
     def drivers(self, request):
         drivers = self.model.objects.filter(is_user=True)
         serializer = self.get_serializer(drivers, many=True)
