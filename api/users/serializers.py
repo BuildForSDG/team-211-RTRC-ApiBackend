@@ -6,7 +6,7 @@ from rest_framework.serializers import (
 from rest_framework import serializers
 
 from .models import User, NationalIdType
-from vehicles.models import Vehicle
+from api.vehicles.models import Vehicle
 
 
 class NationalIdTypeSerializer(ModelSerializer):
