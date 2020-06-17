@@ -37,7 +37,7 @@ class AdminVehicleCategoryViewSet(ModelViewSet):
         uploaded_file = uploader.upload(request.data['image'])
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        serializer.save(image=uploaded_file['secure_url'])
+        serializer.save(image=uploaded_file['secure_url'], toll_fee=float(request.data['toll_fee']))
         headers = self.get_success_headers(serializer.data)
         return Response(data=serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
@@ -47,7 +47,7 @@ class AdminVehicleCategoryViewSet(ModelViewSet):
         # uploaded_file = uploader.upload(request.data['image'])
         serializer = self.get_serializer(instance, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
-        serializer.save()
+        serializer.save(toll_fee=request.data.get('toll_fee', instance.toll_fee))
         headers = self.get_success_headers(serializer.data)
         return Response(data=serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 

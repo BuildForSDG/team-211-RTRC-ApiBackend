@@ -9,7 +9,7 @@ class VehicleCategorySerializer(ModelSerializer):
     class Meta:
         model = VehicleCategory
         fields = '__all__'
-        read_only_fields = ('id', 'image',)
+        read_only_fields = ('id', 'image', 'toll_fee')
 
 
 class VehicleSerializer(ModelSerializer):
