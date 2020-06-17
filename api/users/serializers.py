@@ -6,6 +6,7 @@ from rest_framework.serializers import (
 from rest_framework import serializers
 
 from .models import User, NationalIdType
+from vehicles.models import Vehicle
 
 
 class NationalIdTypeSerializer(ModelSerializer):
@@ -26,6 +27,8 @@ class CollectorSerializer(ModelSerializer):
 
 
 class UserSerializer(ModelSerializer):
+    vehicles = SerializerMethodField()
+
     class Meta:
         model = User
         fields = [
@@ -36,6 +39,7 @@ class UserSerializer(ModelSerializer):
             'phone',
             'is_user',
             'is_collector',
+            'vehicles',
         ]
         read_only_fields = (
             'id',
@@ -44,6 +48,10 @@ class UserSerializer(ModelSerializer):
             'is_user',
             'is_collector',
         )
+    
+    def get_vehicles(self, obj):
+        vehicles = Vehicle.objects.filter(user=obj)
+        return vehicles.count()
 
 
 class AdminUserSerializer(ModelSerializer):
