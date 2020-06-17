@@ -54,9 +54,10 @@ class DepositSerializer(serializers.ModelSerializer):
 
 
 class AdminDepositSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
+    
     class Meta:
         model = Deposit
-        user = serializers.PrimaryKeyRelatedField(read_only=True, default=serializers.CurrentUserDefault())
         fields = ['id',
                   'user',
                   'wallet',
