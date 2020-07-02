@@ -39,14 +39,14 @@ class WalletViewSet(ModelViewSet):
             total_balance += float(w.balance)
             all_balances.append(w.balance)
         
-        average_balance = total_balance / 2
+        average_balance = total_balance / wallets.count()
         min_balance = min(all_balances)
         max_balance = max(all_balances)
 
         stats = {
             'users': user_count,
             'total_balance': total_balance,
-            'average_balance': average_balance,
+            'average_balance': str(round(average_balance, 2)) ,
             'min_balance': min_balance,
             'max_balance': max_balance
         }
